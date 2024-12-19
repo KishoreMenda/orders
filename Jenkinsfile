@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_NAME = "kmenda/orders-app"
+        DOCKER_IMAGE_NAME = "kmenda/orders"
         DOCKER_REGISTRY = 'https://index.docker.io/v1/'
         DOCKER_USERNAME = 'kmenda' 
         DOCKER_PASSWORD = 'Burtbee@649'
@@ -11,14 +11,14 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/KishoreMenda/orders'
+                git branch: 'main', url: 'https://github.com/KishoreMenda/orders'
             }
         }
 
         stage('Run Tests') {
             steps {
                 script {
-                    sh './mvnw test'
+                    sh './mvn test'
                 }
             }
         }
