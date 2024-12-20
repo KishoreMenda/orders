@@ -25,32 +25,24 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE_NAME}", '.')
-                }
+                sh "docker build -t ${DOCKER_IMAGE_NAME} ."
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                script {
-                    // Log in to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                        // Push Docker image to Docker Hub
-                        docker.withRegistry("${DOCKER_REGISTRY}", 'docker-hub-credentials') {
-                            docker.image("${DOCKER_IMAGE_NAME}").push()
-                        }
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                    docker push ${DOCKER_IMAGE_NAME}
+                    '''
                 }
             }
         }
 
         stage('Deploy Application') {
             steps {
-                script {
-                    docker.image("${DOCKER_IMAGE_NAME}").run '-d -p 8080:8080'
-                }
+                sh "docker run -d -p 8080:8080 ${DOCKER_IMAGE_NAME}"
             }
         }
     }
