@@ -20,6 +20,7 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public Map<String, Object> getOrderById(@PathVariable String orderId) {
+        System.out.println("OrderController.getOrderById() called");
         return orderService.getOrderById(orderId);
     }
 }
