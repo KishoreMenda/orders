@@ -14,6 +14,14 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/KishoreMenda/orders'
             }
         }
+        
+        stage('Build Code') {
+            steps {
+                script {
+                    sh './mvnw clean install'
+                }
+            }
+        }
 
         stage('Run Tests') {
             steps {
@@ -31,12 +39,8 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh '''
-                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                    docker push ${DOCKER_IMAGE_NAME}
-                    '''
-                }
+                sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                sh "docker push ${DOCKER_IMAGE_NAME}"
             }
         }
 
