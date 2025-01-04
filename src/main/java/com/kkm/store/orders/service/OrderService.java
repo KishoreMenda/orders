@@ -17,7 +17,10 @@ public class OrderService {
 
     public Map<String, Object> getOrderById(String orderId) {
         System.out.println("OrderService.getOrderById() called");
+        System.out.println("OrderService.getOrderById() called with orderId: " + orderId);
+
         Order order = orderRepository.findByOrderId(orderId);
+        System.out.println("OrderService.getOrderById() returned: " + order);
         Map<String, Object> response = new HashMap<>();
         response.put("order", order);
         return response;
