@@ -44,16 +44,19 @@ pipeline {
             }
         }
 
-        stage('Deploy Application') {
+        stage('Deploy to Kubernetes') {
             steps {
-                sh "docker run -d -p 8083:8083 ${DOCKER_IMAGE_NAME}"
+                sh '''
+                kubectl apply -f k8s/orders-deployment.yaml
+                kubectl apply -f k8s/orders-service.yaml
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Application successfully built, Docker image pushed, and container started.'
+            echo 'Application successfully built, Docker image pushed, and deployed to Kubernetes!'
         }
         failure {
             echo 'Pipeline failed.'

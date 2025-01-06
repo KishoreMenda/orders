@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-service
+spec:
+  selector:
+    app: orders
+  ports:
+    - protocol: TCP
+      port: 8083          # Cluster-wide port (can stay as 8083)
+      targetPort: 8083    # Port inside the container
+      nodePort: 30083     # Exposed port on the Minikube host machine (30000-32767 range)
+  type: NodePort
