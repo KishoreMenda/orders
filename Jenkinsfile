@@ -48,7 +48,7 @@ pipeline {
 
     post {
         success {
-            echo 'Application successfully built, Docker image pushed, and deployed to Kubernetes!'
+            echo 'Application successfully built, Docker image pushed.'
         }
         failure {
             echo 'Pipeline failed.'
