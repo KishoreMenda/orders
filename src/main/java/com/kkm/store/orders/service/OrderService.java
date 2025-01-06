@@ -24,7 +24,7 @@ public class OrderService {
         this.restTemplate = restTemplate;
     }
 
-    private static final String INVENTORY_SERVICE_URL = "http://localhost:8084/api/inventory/";
+    private static final String INVENTORY_SERVICE_URL = "http://inventory-service:8084/api/inventory/";
 
     public Map<String, Object> getOrderById(String orderId) {
         System.out.println("OrderService.getOrderById() called");
